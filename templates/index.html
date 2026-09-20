@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative pt-20 pb-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <div class="max-w-5xl mx-auto text-center relative z-10">
+        <!-- Badge -->
+        <div class="inline-flex items-center px-5 py-2.5 rounded-full glass-card border border-purple-500/20 text-sm text-slate-300 mb-8 animate-fade-in">
+            <span class="w-2 h-2 bg-green-400 rounded-full mr-3 animate-pulse"></span>
+            AI-Powered Recommendation Engine
+        </div>
+        
+        <!-- Main Heading -->
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6 animate-slide-up">
+            Find Your Perfect
+            <br>
+            <span class="gradient-text-blue">Frames</span> with AI
+        </h1>
+        
+        <!-- Subtext -->
+        <p class="text-xl text-slate-400 max-w-2xl mx-auto mb-12 animate-slide-up leading-relaxed" style="animation-delay: 0.1s;">
+            Upload a photo and let our advanced AI analyze your face shape, skin tone, and facial features 
+            to recommend spectacles that complement your unique look.
+        </p>
+        
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up" style="animation-delay: 0.2s;">
+            <a href="{{ url_for('predict') }}" class="glow-button px-10 py-4 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl text-white font-semibold text-lg hover:from-purple-400 hover:to-blue-400 transition-all flex items-center group">
+                Get Started
+                <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                </svg>
+            </a>
+            <a href="#how-it-works" class="px-10 py-4 rounded-xl text-slate-300 font-medium hover:text-white hover:bg-white/5 transition-all">
+                Learn More
+            </a>
+        </div>
+        
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-8 mt-20 max-w-2xl mx-auto">
+            <div class="text-center glass-card rounded-xl p-6 card-hover-scale">
+                <div class="text-4xl font-bold gradient-text-blue mb-1">5</div>
+                <div class="text-sm text-slate-500">Face Shapes</div>
+            </div>
+            <div class="text-center glass-card rounded-xl p-6 card-hover-scale">
+                <div class="text-4xl font-bold gradient-text-blue mb-1">20+</div>
+                <div class="text-sm text-slate-500">Frame Styles</div>
+            </div>
+            <div class="text-center glass-card rounded-xl p-6 card-hover-scale">
+                <div class="text-4xl font-bold gradient-text-blue mb-1">AI</div>
+                <div class="text-sm text-slate-500">Powered</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Decorative elements -->
+    <div class="absolute top-1/4 left-0 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+</section>
+
+<!-- Features Section -->
+<section class="relative py-24 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+            <div class="inline-flex items-center px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-sm mb-6">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+                Core Features
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4">Powered by <span class="gradient-text-blue">Advanced AI</span></h2>
+            <p class="text-slate-400 max-w-2xl mx-auto text-lg">
+                Our system combines deep learning and facial landmark detection to provide personalized recommendations.
+            </p>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="glass-card card-hover-scale rounded-2xl p-8 group">
+                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <svg class="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Face Shape Analysis</h3>
+                <p class="text-slate-400 leading-relaxed">
+                    Hybrid deep learning model combining EfficientNet-B0 with geometric metrics for accurate classification into Round, Oval, Square, Heart, or Oblong.
+                </p>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="glass-card card-hover-scale rounded-2xl p-8 group">
+                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Smart Recommendations</h3>
+                <p class="text-slate-400 leading-relaxed">
+                    Rule-based engine matches your face shape, skin tone, and facial proportions to find the perfect frame styles with explainable scores.
+                </p>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="glass-card card-hover-scale rounded-2xl p-8 group">
+                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <svg class="w-7 h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Skin Tone Detection</h3>
+                <p class="text-slate-400 leading-relaxed">
+                    LAB color space analysis accurately classifies skin tone into Fair, Light, Medium, Brown, or Dark for optimal color matching.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section id="how-it-works" class="relative py-24 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+            <div class="inline-flex items-center px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm mb-6">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+                Simple Process
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4">How It <span class="gradient-text-blue">Works</span></h2>
+            <p class="text-slate-400 max-w-2xl mx-auto text-lg">
+                Get personalized frame recommendations in three simple steps.
+            </p>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-8 relative">
+            <!-- Connection Line (desktop) -->
+            <div class="hidden md:block absolute top-20 left-1/4 right-1/4 h-0.5 bg-gradient-to-r from-purple-500/50 via-blue-500 to-purple-500/50"></div>
+            
+            <!-- Step 1 -->
+            <div class="relative text-center">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center mx-auto mb-6 text-2xl font-bold relative z-10 shadow-lg shadow-purple-500/30">
+                    1
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Upload Your Photo</h3>
+                <p class="text-slate-400 leading-relaxed">
+                    Take a clear front-facing photo or upload an existing one. Ensure good lighting for best results.
+                </p>
+            </div>
+            
+            <!-- Step 2 -->
+            <div class="relative text-center">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center mx-auto mb-6 text-2xl font-bold relative z-10 shadow-lg shadow-purple-500/30">
+                    2
+                </div>
+                <h3 class="text-xl font-semibold mb-3">AI Analysis</h3>
+                <p class="text-slate-400 leading-relaxed">
+                    Our AI detects facial landmarks, determines your face shape, and analyzes your skin tone in seconds.
+                </p>
+            </div>
+            
+            <!-- Step 3 -->
+            <div class="relative text-center">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center mx-auto mb-6 text-2xl font-bold relative z-10 shadow-lg shadow-purple-500/30">
+                    3
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Get Recommendations</h3>
+                <p class="text-slate-400 leading-relaxed">
+                    Receive personalized frame suggestions with detailed explanations for why each style suits you.
+                </p>
+            </div>
+        </div>
+        
+        <!-- CTA -->
+        <div class="text-center mt-16">
+            <a href="{{ url_for('predict') }}" class="glow-button inline-flex items-center px-10 py-4 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl text-white font-semibold text-lg hover:from-purple-400 hover:to-blue-400 transition-all group">
+                Try It Now — It's Free
+                <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Tech Stack Section -->
+<section class="relative py-24 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-5xl mx-auto">
+        <div class="glass-card rounded-3xl p-10 md:p-14 border border-white/10">
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-sm mb-6">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+                    </svg>
+                    Technology Stack
+                </div>
+                <h2 class="text-2xl md:text-3xl font-bold mb-3">Built with <span class="gradient-text-blue">Modern AI</span></h2>
+                <p class="text-slate-400">Leveraging state-of-the-art machine learning technologies</p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="glass-inner rounded-xl p-6 text-center card-hover-scale">
+                    <div class="text-2xl font-bold gradient-text-blue mb-2">PyTorch</div>
+                    <div class="text-sm text-slate-500">Deep Learning</div>
+                </div>
+                <div class="glass-inner rounded-xl p-6 text-center card-hover-scale">
+                    <div class="text-2xl font-bold gradient-text-blue mb-2">MediaPipe</div>
+                    <div class="text-sm text-slate-500">Face Landmarks</div>
+                </div>
+                <div class="glass-inner rounded-xl p-6 text-center card-hover-scale">
+                    <div class="text-2xl font-bold gradient-text-blue mb-2">OpenCV</div>
+                    <div class="text-sm text-slate-500">Image Processing</div>
+                </div>
+                <div class="glass-inner rounded-xl p-6 text-center card-hover-scale">
+                    <div class="text-2xl font-bold gradient-text-blue mb-2">Flask</div>
+                    <div class="text-sm text-slate-500">Web Framework</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Final CTA Section -->
+<section class="relative py-24 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-6">
+            Ready to Find Your <span class="gradient-text-blue">Perfect Frames</span>?
+        </h2>
+        <p class="text-slate-400 text-lg mb-10 max-w-2xl mx-auto">
+            Join thousands of users who have discovered their ideal eyewear using our AI-powered recommendation system.
+        </p>
+        <a href="{{ url_for('predict') }}" class="glow-button inline-flex items-center px-12 py-5 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl text-white font-semibold text-xl hover:from-purple-400 hover:to-blue-400 transition-all group">
+            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            Start Your Analysis
+            <svg class="w-5 h-5 ml-3 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+            </svg>
+        </a>
+    </div>
+</section>
+{% endblock %}

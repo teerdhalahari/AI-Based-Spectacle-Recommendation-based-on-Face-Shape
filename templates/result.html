@@ -1,0 +1,624 @@
+{% extends "base.html" %}
+
+{% block title %}Your Results{% endblock %}
+
+{% block content %}
+<section class="py-12 px-4 sm:px-6 lg:px-8 min-h-screen">
+    <div class="max-w-7xl mx-auto">
+        
+        {% if success %}
+        <!-- Success Header -->
+        <div class="text-center mb-10 result-fade-in" id="headerSection">
+            <div class="inline-flex items-center px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-sm mb-6">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                Analysis Complete
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                Your <span class="gradient-text-blue">AI Analysis</span> Results
+            </h1>
+            <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+                Based on advanced facial recognition and machine learning analysis
+            </p>
+        </div>
+        
+        <!-- Main Analysis Grid: 2 columns on desktop, stacked on mobile -->
+        <div class="grid lg:grid-cols-2 gap-8 mb-12">
+            
+            <!-- LEFT CARD: Uploaded Image -->
+            <div class="glass-card card-hover-scale rounded-2xl p-6 lg:p-8 result-fade-in" id="imageCard" style="--delay: 0.1s">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-semibold flex items-center">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center mr-3">
+                            <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        Your Photo
+                    </h2>
+                    <span class="text-xs text-slate-500 bg-slate-800/50 px-3 py-1 rounded-full">Analyzed</span>
+                </div>
+                
+                <div class="relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <img src="{{ image_url }}" alt="Uploaded photo" class="relative w-full rounded-xl object-cover aspect-square shadow-2xl">
+                </div>
+                
+                <!-- Image Quality Badge -->
+                {% if brightness_info %}
+                <div class="mt-6 glass-inner rounded-xl p-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-slate-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                            </svg>
+                            <span class="text-sm text-slate-400">Image Quality</span>
+                        </div>
+                        {% if brightness_info.correction_applied %}
+                        <span class="text-xs bg-green-500/10 text-green-400 px-3 py-1 rounded-full border border-green-500/20">
+                            Auto-enhanced
+                        </span>
+                        {% else %}
+                        <span class="text-xs bg-slate-500/10 text-slate-400 px-3 py-1 rounded-full border border-slate-500/20">
+                            Optimal
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- RIGHT CARD: Face Analysis Results -->
+            <div class="glass-card card-hover-scale rounded-2xl p-6 lg:p-8 result-fade-in" id="analysisCard" style="--delay: 0.2s">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-semibold flex items-center">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center mr-3">
+                            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
+                        </div>
+                        Face Analysis
+                    </h2>
+                    <div id="stabilityBadge" class="stability-badge stability-high px-3 py-1.5 rounded-full text-xs font-medium">
+                        Stable
+                    </div>
+                </div>
+                
+                <div class="space-y-5">
+                    
+                    <!-- Face Shape Section -->
+                    <div class="glass-inner rounded-xl p-5 analysis-section opacity-0 translate-y-4" data-delay="0">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <div class="text-sm text-slate-500 mb-1">Detected Face Shape</div>
+                                <div class="text-3xl font-bold gradient-text-blue capitalize" id="faceShapeText">{{ face_shape }}</div>
+                            </div>
+                            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
+                                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <!-- Animated Confidence Bar -->
+                        <div class="mt-4">
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-slate-400">Primary Confidence</span>
+                                <span class="text-white font-semibold" id="confidenceValue">
+                                    {% if face_shape_confidence and face_shape %}
+                                    {{ "%.0f"|format((face_shape_confidence.get(face_shape|capitalize, face_shape_confidence.get(face_shape, 0.5)) or 0.5) * 100) }}%
+                                    {% else %}
+                                    85%
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="w-full bg-white/10 rounded-full h-3 overflow-hidden">
+                                <div id="confidenceBar"
+                                     class="h-3 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 progress-bar-animated"
+                                     style="width: 0%">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- TOP-3 PREDICTIONS -->
+                        {% if face_shape_confidence %}
+                        <div class="mt-5 pt-5 border-t border-white/5">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="text-sm text-slate-400 flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                    </svg>
+                                    Top Predictions
+                                </h3>
+                                <span class="text-xs text-slate-600">Probability Distribution</span>
+                            </div>
+                            <div id="topPredictionsContainer" class="space-y-2.5">
+                                <!-- Dynamically populated by JS -->
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Skin Tone + Stability Row -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Skin Tone -->
+                        <div class="glass-inner rounded-xl p-4 analysis-section opacity-0 translate-y-4" data-delay="100">
+                            <div class="text-xs text-slate-500 mb-2">Skin Tone</div>
+                            <div class="flex items-center gap-3">
+                                <div id="skinToneDot"
+                                     class="w-10 h-10 rounded-full ring-2 ring-white/10 skin-tone-dot flex-shrink-0"
+                                     style="background-color: #D8A47F;">
+                                </div>
+                                <div>
+                                    <div class="text-lg font-semibold capitalize" id="skinToneText">{{ skin_tone }}</div>
+                                    <div class="text-xs text-slate-500">Classification</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Stability -->
+                        <div class="glass-inner rounded-xl p-4 analysis-section opacity-0 translate-y-4" data-delay="150">
+                            <div class="text-xs text-slate-500 mb-2">Stability Score</div>
+                            <div class="flex items-center gap-3">
+                                <div id="stabilityRing" class="w-10 h-10 rounded-full flex items-center justify-center bg-green-500/10 ring-2 ring-green-500/30">
+                                    <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-lg font-semibold" id="stabilityText">High</div>
+                                    <div class="text-xs text-slate-500" id="stabilityPercent">92%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- FACIAL METRICS MINI CARDS -->
+                    {% if facial_metrics %}
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 analysis-section opacity-0 translate-y-4" data-delay="200">
+                        <div class="bg-white/5 rounded-xl p-4 text-center border border-white/10 hover:border-purple-500/30 transition-colors">
+                            <div class="text-xs text-slate-500 mb-1">Jaw Ratio</div>
+                            <div class="text-xl font-bold text-white" id="jawRatioValue">{{ "%.2f"|format(facial_metrics.jaw_to_cheek_ratio) }}</div>
+                            <div class="mt-2 w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
+                                <div class="h-1.5 rounded-full bg-gradient-to-r from-purple-500 to-purple-400 metric-mini-bar"
+                                     data-width="{{ facial_metrics.jaw_to_cheek_ratio * 100 }}"
+                                     style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="bg-white/5 rounded-xl p-4 text-center border border-white/10 hover:border-blue-500/30 transition-colors">
+                            <div class="text-xs text-slate-500 mb-1">Cheek Ratio</div>
+                            <div class="text-xl font-bold text-white" id="cheekRatioValue">{{ "%.2f"|format(facial_metrics.forehead_to_cheek_ratio) }}</div>
+                            <div class="mt-2 w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
+                                <div class="h-1.5 rounded-full bg-gradient-to-r from-blue-500 to-blue-400 metric-mini-bar"
+                                     data-width="{{ facial_metrics.forehead_to_cheek_ratio * 100 }}"
+                                     style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="bg-white/5 rounded-xl p-4 text-center border border-white/10 hover:border-cyan-500/30 transition-colors">
+                            <div class="text-xs text-slate-500 mb-1">Length Ratio</div>
+                            <div class="text-xl font-bold text-white" id="lengthRatioValue">{{ "%.2f"|format(facial_metrics.cheek_to_length_ratio) }}</div>
+                            <div class="mt-2 w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
+                                <div class="h-1.5 rounded-full bg-gradient-to-r from-cyan-500 to-cyan-400 metric-mini-bar"
+                                     data-width="{{ facial_metrics.cheek_to_length_ratio * 100 }}"
+                                     style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- AI INSIGHT SECTION -->
+                    <div class="bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-500/20 rounded-xl p-4 analysis-section opacity-0 translate-y-4" data-delay="300">
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center mr-3 flex-shrink-0">
+                                <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-sm font-medium text-purple-300 mb-1.5">AI Insight</h4>
+                                <p id="aiInsightText" class="text-sm text-slate-300/90 italic leading-relaxed">
+                                    Analyzing your facial proportions...
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recommendations Section -->
+        <div class="result-fade-in" id="recommendationsSection" style="--delay: 0.4s">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold flex items-center">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center mr-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                        </svg>
+                    </div>
+                    <span class="gradient-text-blue">Perfect Frames</span>&nbsp;for You
+                </h2>
+                <span class="text-sm text-slate-500 hidden sm:block">Top {{ recommendations|length if recommendations else 0 }} matches</span>
+            </div>
+            
+            {% if recommendations %}
+            <div id="recommendationsGrid" class="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {% for rec in recommendations[:10] %}
+                <div class="glass-card rec-card rounded-2xl p-6 border border-white/10">
+                    <img
+                        src="{{ rec.image_path }}"
+                        loading="lazy"
+                        class="w-full h-40 object-contain mx-auto"
+                        alt="Frame"
+                        onerror="this.onerror=null; this.src='/static/glasses/placeholder.jpg';">
+                    <div class="text-xs text-slate-500 mb-1">Frame Shape</div>
+                    <div class="text-lg font-semibold text-white capitalize mb-3">{{ rec.frame_shape }}</div>
+                    <div class="text-xs text-slate-500 mb-1">Frame Color</div>
+                    <div class="text-sm text-slate-300 capitalize mb-3">{{ rec.frame_color }}</div>
+                    <div class="text-xs text-slate-500 mb-1">Rim Type</div>
+                    <div class="text-sm text-slate-300 capitalize mb-3">{{ rec.rim_type }}</div>
+                    <p class="text-sm text-gray-400 mb-4">
+                        Size: <span class="text-white capitalize">{{ rec.frame_width or rec.frame_width_category or "Medium" }}</span>
+                    </p>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-xs text-slate-500">Score</span>
+                        <span class="text-lg font-bold text-purple-400">{{ "%.0f"|format((rec.total_score or rec.score or 0) * 100) }}%</span>
+                    </div>
+                    <p class="text-sm text-slate-400 italic leading-relaxed">{{ rec.explanation }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% if recommendations|length > 10 %}
+            <div class="mt-8 text-center">
+                <button type="button" id="loadMoreBtn" class="glow-button px-8 py-3 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl text-white font-medium hover:from-purple-400 hover:to-blue-400 transition-all">
+                    Load More
+                </button>
+            </div>
+            {% endif %}
+            <script>
+                window.__RECOMMENDATIONS__ = {{ recommendations | tojson }};
+                window.__RECOMMENDATIONS_SHOWN__ = Math.min(10, {{ recommendations | length }});
+            </script>
+            {% else %}
+            <div class="glass-card rounded-2xl p-12 text-center">
+                <div class="w-16 h-16 rounded-full bg-slate-800/50 flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-8 h-8 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-medium mb-2">No Recommendations Yet</h3>
+                <p class="text-slate-400">We couldn't generate recommendations at this time. Please try again.</p>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Warnings Section -->
+        {% if warnings %}
+        <div class="mt-10 result-fade-in" id="warningsSection" style="--delay: 0.5s">
+            <div class="glass-card rounded-xl p-5 border border-yellow-500/20 bg-yellow-500/5">
+                <h3 class="text-yellow-400 font-medium mb-3 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                    Analysis Notes
+                </h3>
+                <ul class="text-sm text-yellow-300/80 space-y-2">
+                    {% for warning in warnings %}
+                    <li class="flex items-start">
+                        <span class="text-yellow-500 mr-2">•</span>
+                        <span>{{ warning }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+        
+        {% else %}
+        <!-- Error State -->
+        <div class="max-w-lg mx-auto text-center py-12">
+            <div class="glass-card rounded-2xl p-10">
+                <div class="w-20 h-20 rounded-full bg-gradient-to-br from-red-500/20 to-red-600/20 flex items-center justify-center mx-auto mb-8">
+                    <svg class="w-10 h-10 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-bold mb-4">Analysis Failed</h1>
+                <p class="text-slate-400 mb-8 text-lg">
+                    {{ error_message or "We couldn't analyze your image. Please ensure your photo shows a clear, front-facing view of your face." }}
+                </p>
+                
+                {% if image_url %}
+                <div class="relative inline-block mb-8">
+                    <div class="absolute -inset-1 bg-red-500/20 rounded-xl blur"></div>
+                    <img src="{{ image_url }}" alt="Uploaded photo" class="relative w-48 h-48 object-cover rounded-xl">
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-14 result-fade-in" id="actionsSection" style="--delay: 0.6s">
+            <a href="{{ url_for('predict') }}" class="glow-button px-10 py-4 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl text-white font-semibold text-lg hover:from-purple-400 hover:to-blue-400 transition-all flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                Try Another Photo
+            </a>
+            <a href="{{ url_for('index') }}" class="px-10 py-4 rounded-xl text-slate-300 font-medium hover:text-white hover:bg-white/5 transition-all flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+                Back to Home
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Skin tone color mapping
+    const SKIN_TONE_COLORS = {
+        fair: "#F8E8D8",
+        light: "#F1C7A3",
+        medium: "#D8A47F",
+        brown: "#9C6644",
+        dark: "#5A3E2B",
+        dusky: "#9C6644",
+        unknown: "#808080"
+    };
+    
+    // Face shape confidence data from backend
+    const faceShapeConfidence = {{ face_shape_confidence|tojson if face_shape_confidence else '{}' }};
+    const faceShape = "{{ face_shape|default('') }}";
+    const skinTone = "{{ skin_tone|default('medium') }}".toLowerCase();
+    const stability = {{ stability|default(0.8) }};
+    
+    // Facial metrics
+    const facialMetrics = {
+        jawRatio: {{ facial_metrics.jaw_to_cheek_ratio|default(0.85) if facial_metrics else 0.85 }},
+        cheekRatio: {{ facial_metrics.forehead_to_cheek_ratio|default(0.90) if facial_metrics else 0.90 }},
+        lengthRatio: {{ facial_metrics.cheek_to_length_ratio|default(0.75) if facial_metrics else 0.75 }}
+    };
+    
+    // Get stability info
+    function getStabilityInfo(stability) {
+        if (stability >= 0.75) {
+            return { class: 'stability-high', badge: 'Stable', text: 'High', color: 'green', icon: 'check' };
+        } else if (stability >= 0.50) {
+            return { class: 'stability-medium', badge: 'Moderate', text: 'Medium', color: 'yellow', icon: 'minus' };
+        } else if (stability >= 0.30) {
+            return { class: 'stability-low', badge: 'Low', text: 'Low', color: 'orange', icon: 'alert' };
+        } else {
+            return { class: 'stability-unstable', badge: 'Unstable', text: 'Unstable', color: 'red', icon: 'x' };
+        }
+    }
+    
+    // Generate AI insight based on metrics and face shape
+    function generateAIInsight(faceShape, metrics) {
+        const { jawRatio, cheekRatio, lengthRatio } = metrics;
+        
+        const insights = {
+            heart: [
+                `Your forehead is notably wider than your jaw line (ratio: ${cheekRatio.toFixed(2)}), which is a defining characteristic of heart-shaped faces. Angular frames will complement your natural features.`,
+                `With a cheek-to-length ratio of ${lengthRatio.toFixed(2)}, your face shows classic heart-shape proportions. Frames with wider bottoms can help balance your features beautifully.`
+            ],
+            oval: [
+                `Your balanced facial proportions (jaw ratio: ${jawRatio.toFixed(2)}) indicate an oval face shape, considered ideal for most frame styles. You have great flexibility in frame choices.`,
+                `With harmonious metrics across all measurements, your oval face can pull off virtually any frame style. Consider experimenting with bold geometric shapes.`
+            ],
+            round: [
+                `Your cheek-to-length ratio of ${lengthRatio.toFixed(2)} indicates fuller cheeks, characteristic of round faces. Angular rectangular frames can add definition and structure.`,
+                `With similar width and length proportions, your round face would benefit from frames that add angles and elongate your features.`
+            ],
+            square: [
+                `Your strong jaw ratio of ${jawRatio.toFixed(2)} indicates defined jaw lines, typical of square faces. Round or oval frames can soften these angular features.`,
+                `The balanced proportions between your jaw and cheekbones create a structured look. Consider curved frames to add softness and contrast.`
+            ],
+            oblong: [
+                `Your lower cheek-to-length ratio (${lengthRatio.toFixed(2)}) suggests a longer face shape. Frames with decorative temples or bold colors can add width and balance.`,
+                `With an elongated facial structure, oversized frames or those with strong horizontal lines will complement your proportions beautifully.`
+            ]
+        };
+        
+        const shapeInsights = insights[faceShape.toLowerCase()] || [
+            `Based on your facial measurements (jaw: ${jawRatio.toFixed(2)}, cheek: ${cheekRatio.toFixed(2)}, length: ${lengthRatio.toFixed(2)}), our AI has identified frame styles that will enhance your unique features.`
+        ];
+        
+        return shapeInsights[Math.floor(Math.random() * shapeInsights.length)];
+    }
+    
+    // Render top predictions
+    function renderTopPredictions(confidence) {
+        const container = document.getElementById('topPredictionsContainer');
+        if (!container || !confidence || Object.keys(confidence).length === 0) return;
+        
+        // Sort by confidence and get top 3
+        const sorted = Object.entries(confidence)
+            .map(([shape, conf]) => ({ shape, conf: typeof conf === 'number' ? conf : 0 }))
+            .sort((a, b) => b.conf - a.conf)
+            .slice(0, 3);
+        
+        // Color gradients for bars
+        const barColors = [
+            'from-purple-500 to-blue-500',
+            'from-blue-500 to-cyan-500',
+            'from-cyan-500 to-teal-500'
+        ];
+        
+        container.innerHTML = sorted.map((item, index) => {
+            const percent = Math.round(item.conf * 100);
+            const isTop = index === 0;
+            return `
+                <div class="flex items-center gap-3 prediction-bar opacity-0" style="animation-delay: ${index * 100}ms">
+                    <div class="w-16 text-xs ${isTop ? 'text-white font-medium' : 'text-slate-500'} capitalize">${item.shape}</div>
+                    <div class="flex-1 bg-white/5 rounded-full h-2 overflow-hidden">
+                        <div class="h-2 rounded-full bg-gradient-to-r ${barColors[index]} progress-bar-animated"
+                             data-width="${percent}"
+                             style="width: 0%"></div>
+                    </div>
+                    <div class="w-10 text-xs text-right ${isTop ? 'text-white font-semibold' : 'text-slate-500'}">${percent}%</div>
+                </div>
+            `;
+        }).join('');
+        
+        // Animate bars
+        setTimeout(() => {
+            container.querySelectorAll('.prediction-bar').forEach((bar, index) => {
+                setTimeout(() => {
+                    bar.classList.remove('opacity-0');
+                    bar.classList.add('animate-fade-in');
+                    const progressBar = bar.querySelector('.progress-bar-animated');
+                    if (progressBar) {
+                        progressBar.style.width = progressBar.getAttribute('data-width') + '%';
+                    }
+                }, index * 100);
+            });
+        }, 800);
+    }
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get main confidence
+        let mainConfidence = 0.85;
+        if (faceShapeConfidence && faceShape) {
+            const capitalizedShape = faceShape.charAt(0).toUpperCase() + faceShape.slice(1);
+            mainConfidence = faceShapeConfidence[capitalizedShape] || faceShapeConfidence[faceShape] || 0.85;
+        }
+        const confidencePercent = Math.round(mainConfidence * 100);
+        
+        // Fade in main sections
+        setTimeout(() => {
+            document.querySelectorAll('.result-fade-in').forEach((el, index) => {
+                setTimeout(() => {
+                    el.classList.add('visible');
+                }, index * 100);
+            });
+        }, 100);
+        
+        // Animate analysis sections with stagger
+        setTimeout(() => {
+            document.querySelectorAll('.analysis-section').forEach((section) => {
+                const delay = parseInt(section.getAttribute('data-delay') || 0);
+                setTimeout(() => {
+                    section.style.transition = 'all 0.7s cubic-bezier(0.4, 0, 0.2, 1)';
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, delay);
+            });
+        }, 300);
+        
+        // Animate confidence bar
+        setTimeout(() => {
+            const confidenceBar = document.getElementById('confidenceBar');
+            if (confidenceBar) {
+                confidenceBar.style.width = confidencePercent + '%';
+            }
+        }, 600);
+        
+        // Render top predictions
+        renderTopPredictions(faceShapeConfidence);
+        
+        // Animate mini metric bars
+        setTimeout(() => {
+            document.querySelectorAll('.metric-mini-bar').forEach((bar) => {
+                const targetWidth = bar.getAttribute('data-width');
+                bar.style.width = targetWidth + '%';
+            });
+        }, 1000);
+        
+        // Set skin tone color
+        const skinToneDot = document.getElementById('skinToneDot');
+        if (skinToneDot) {
+            const color = SKIN_TONE_COLORS[skinTone] || SKIN_TONE_COLORS.medium;
+            skinToneDot.style.backgroundColor = color;
+            skinToneDot.style.boxShadow = `0 0 15px ${color}60`;
+        }
+        
+        // Set stability indicator
+        const stabilityInfo = getStabilityInfo(stability);
+        const stabilityBadge = document.getElementById('stabilityBadge');
+        const stabilityText = document.getElementById('stabilityText');
+        const stabilityPercent = document.getElementById('stabilityPercent');
+        const stabilityRing = document.getElementById('stabilityRing');
+        
+        if (stabilityBadge) {
+            stabilityBadge.className = `stability-badge ${stabilityInfo.class} px-3 py-1.5 rounded-full text-xs font-medium`;
+            stabilityBadge.textContent = stabilityInfo.badge;
+        }
+        
+        if (stabilityText) {
+            stabilityText.textContent = stabilityInfo.text;
+        }
+        
+        if (stabilityPercent) {
+            stabilityPercent.textContent = Math.round(stability * 100) + '%';
+        }
+        
+        if (stabilityRing) {
+            const colorMap = {
+                green: { bg: 'bg-green-500/10', ring: 'ring-green-500/30', text: 'text-green-400' },
+                yellow: { bg: 'bg-yellow-500/10', ring: 'ring-yellow-500/30', text: 'text-yellow-400' },
+                orange: { bg: 'bg-orange-500/10', ring: 'ring-orange-500/30', text: 'text-orange-400' },
+                red: { bg: 'bg-red-500/10', ring: 'ring-red-500/30', text: 'text-red-400' }
+            };
+            const colors = colorMap[stabilityInfo.color];
+            stabilityRing.className = `w-10 h-10 rounded-full flex items-center justify-center ${colors.bg} ring-2 ${colors.ring}`;
+            stabilityRing.querySelector('svg').className = `w-5 h-5 ${colors.text}`;
+        }
+        
+        // Generate and set AI insight
+        const aiInsightText = document.getElementById('aiInsightText');
+        if (aiInsightText && faceShape) {
+            setTimeout(() => {
+                aiInsightText.textContent = generateAIInsight(faceShape, facialMetrics);
+            }, 1200);
+        }
+        
+        // Load More recommendations (append next 10 from embedded data or API)
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        const recommendationsGrid = document.getElementById('recommendationsGrid');
+        if (loadMoreBtn && recommendationsGrid && typeof window.__RECOMMENDATIONS__ !== 'undefined') {
+            loadMoreBtn.addEventListener('click', function() {
+                const all = window.__RECOMMENDATIONS__;
+                let shown = window.__RECOMMENDATIONS_SHOWN__ || 10;
+                const next = all.slice(shown, shown + 10);
+                if (next.length === 0) {
+                    loadMoreBtn.style.display = 'none';
+                    return;
+                }
+                next.forEach(function(frame) {
+                    const score = (frame.total_score != null ? frame.total_score : frame.score) || 0;
+                    const scorePct = Math.round(score * 100);
+                    const card = document.createElement('div');
+                    card.className = 'glass-card rec-card rounded-2xl p-6 border border-white/10';
+                    card.innerHTML = `
+                        <img src="${frame.image_path || '/static/glasses/placeholder.jpg'}" loading="lazy" class="w-full h-40 object-contain mx-auto rounded-lg bg-white/5 mb-4" alt="Frame" onerror="this.onerror=null; this.src='/static/glasses/placeholder.jpg';">
+                        <div class="text-xs text-slate-500 mb-1">Frame Shape</div>
+                        <div class="text-lg font-semibold text-white capitalize mb-3">${frame.frame_shape || ''}</div>
+                        <div class="text-xs text-slate-500 mb-1">Frame Color</div>
+                        <div class="text-sm text-slate-300 capitalize mb-3">${frame.frame_color || ''}</div>
+                        <div class="text-xs text-slate-500 mb-1">Rim Type</div>
+                        <div class="text-sm text-slate-300 capitalize mb-3">${frame.rim_type || ''}</div>
+                        <p class="text-sm text-gray-400 mb-4">
+                            Size: <span class="text-white capitalize">${frame.frame_width || frame.frame_width_category || frame.frame?.frame_width_category || "Medium"}</span>
+                        </p>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs text-slate-500">Score</span>
+                            <span class="text-lg font-bold text-purple-400">${scorePct}%</span>
+                        </div>
+                        <p class="text-sm text-slate-400 italic leading-relaxed">${frame.explanation || ''}</p>`;
+                    recommendationsGrid.appendChild(card);
+                });
+                window.__RECOMMENDATIONS_SHOWN__ = shown + next.length;
+                if (window.__RECOMMENDATIONS_SHOWN__ >= all.length) {
+                    loadMoreBtn.style.display = 'none';
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

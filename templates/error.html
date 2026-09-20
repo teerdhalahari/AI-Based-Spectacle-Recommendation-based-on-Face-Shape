@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Error {{ code }}{% endblock %}
+
+{% block content %}
+<section class="py-32 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-lg mx-auto text-center">
+        <div class="glass-card rounded-2xl p-12">
+            <!-- Error Icon -->
+            <div class="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-8">
+                <svg class="w-10 h-10 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+            </div>
+            
+            <!-- Error Code -->
+            <div class="text-7xl font-bold gradient-text mb-4">{{ code }}</div>
+            
+            <!-- Error Message -->
+            <h1 class="text-2xl font-bold mb-4">{{ error }}</h1>
+            <p class="text-slate-400 mb-8">
+                {% if code == 404 %}
+                The page you're looking for doesn't exist or has been moved.
+                {% elif code == 500 %}
+                Something went wrong on our end. Please try again later.
+                {% else %}
+                An unexpected error occurred.
+                {% endif %}
+            </p>
+            
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="{{ url_for('index') }}" class="glow-button px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-600 rounded-xl text-white font-semibold hover:from-primary-400 hover:to-primary-500 transition-all">
+                    Go Home
+                </a>
+                <a href="{{ url_for('predict') }}" class="px-6 py-3 rounded-xl text-slate-300 font-medium hover:text-white transition-colors">
+                    Try Analysis
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

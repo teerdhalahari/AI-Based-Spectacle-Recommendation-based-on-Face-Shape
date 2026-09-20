@@ -1,0 +1,30 @@
+# Face2Frame – dependencies
+# Python 3.8+ recommended
+
+# Web
+flask>=2.3.0
+
+# Database
+flask-sqlalchemy>=3.0.0
+
+# ML / face shape classifier
+tensorflow>=2.12.0
+
+# PyTorch hybrid model
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Image processing
+opencv-python>=4.8.0
+numpy>=1.24.0
+Pillow>=10.0.0
+
+# Excel catalog
+pandas>=2.0.0
+openpyxl>=3.1.0
+
+# Face landmark detection
+mediapipe>=0.10.0
+
+# Optional: for migrations
+# flask-migrate>=4.0.0
